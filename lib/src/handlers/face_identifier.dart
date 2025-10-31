@@ -21,24 +21,16 @@ class FaceIdentifier {
       DeviceOrientation.landscapeRight: 270,
     };
 
-    final inputImage = _inputImageFromCameraImage(
-      cameraImage,
-      controller,
-      orientations,
-    );
-
-    print('🖼️ InputImage created: ${inputImage != null}');
-
     DetectedFace? result;
-
     final face = await _detectFace(
       performanceMode: performanceMode,
-      visionImage: inputImage,
+      visionImage: _inputImageFromCameraImage(
+        cameraImage,
+        controller,
+        orientations,
+      ),
     );
-    print('👤 Face detection result: ${face != null}');
     if (face != null) {
-      print('👤 Face object: ${face.face}');
-      print('👤 Well positioned: ${face.wellPositioned}');
       result = face;
     }
 

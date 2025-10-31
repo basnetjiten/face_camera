@@ -122,8 +122,6 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
     return ValueListenableBuilder<FaceCameraState>(
       valueListenable: widget.controller,
       builder: (BuildContext context, FaceCameraState value, Widget? child) {
-        print('🏗️ Building - detectedFace: ${value.detectedFace != null}');
-        print('🏗️ Face object: ${value.detectedFace?.face}');
         final CameraController? cameraController = value.cameraController;
         return Stack(
           alignment: Alignment.center,
@@ -148,7 +146,11 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
                             if (value.detectedFace != null &&
                                 widget.indicatorShape !=
                                     IndicatorShape.none) ...[
-                              Positioned.fill(
+                              SizedBox(
+                                width:
+                                    cameraController.value.previewSize!.width,
+                                height:
+                                    cameraController.value.previewSize!.height,
                                 child:
                                     widget.indicatorBuilder?.call(
                                       context,
