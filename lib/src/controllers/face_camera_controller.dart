@@ -196,10 +196,8 @@ class FaceCameraController extends ValueNotifier<FaceCameraState> {
   }
 
   void _processImage(CameraImage cameraImage) async {
-    print('📷 _processImage called');
     final CameraController? cameraController = value.cameraController;
     if (!value.alreadyCheckingImage) {
-      print('✅ Starting face scan...');
       value = value.copyWith(alreadyCheckingImage: true);
       try {
         await FaceIdentifier.scanImage(
@@ -207,14 +205,7 @@ class FaceCameraController extends ValueNotifier<FaceCameraState> {
           controller: cameraController,
           performanceMode: performanceMode,
         ).then((result) async {
-          print('📸 Scan result: $result');
-          print('📸 Result is null: ${result == null}');
-          if (result != null) {
-            print('📸 Result face: ${result.face}');
-            print('📸 Result wellPositioned: ${result.wellPositioned}');
-          }
           value = value.copyWith(detectedFace: result);
-          print('📦 State detectedFace after update: ${value.detectedFace}');
 
           if (result != null) {
             try {
@@ -232,47 +223,11 @@ class FaceCameraController extends ValueNotifier<FaceCameraState> {
         });
         value = value.copyWith(alreadyCheckingImage: false);
       } catch (ex, stack) {
-        print('🖼️  ERROR SCANIMAGE: ${ex} ${stack}');
         value = value.copyWith(alreadyCheckingImage: false);
         logError('$ex, $stack');
       }
-    } else {
-      print('⏭️ Skipping - already checking image');
     }
   }
-  // void _processImage(CameraImage cameraImage) async {
-  //   final CameraController? cameraController = value.cameraController;
-  //   if (!value.alreadyCheckingImage) {
-  //     value = value.copyWith(alreadyCheckingImage: true);
-  //     try {
-  //       await FaceIdentifier.scanImage(
-  //               cameraImage: cameraImage,
-  //               controller: cameraController,
-  //               performanceMode: performanceMode)
-  //           .then((result) async {
-  //         value = value.copyWith(detectedFace: result);
-  //
-  //         if (result != null) {
-  //           try {
-  //             if (result.face != null) {
-  //               onFaceDetected?.call(result.face);
-  //             }
-  //             if (autoCapture &&
-  //                 (result.wellPositioned || ignoreFacePositioning)) {
-  //               captureImage();
-  //             }
-  //           } catch (e) {
-  //             logError(e.toString());
-  //           }
-  //         }
-  //       });
-  //       value = value.copyWith(alreadyCheckingImage: false);
-  //     } catch (ex, stack) {
-  //       value = value.copyWith(alreadyCheckingImage: false);
-  //       logError('$ex, $stack');
-  //     }
-  //   }
-  // }
 
   @Deprecated('Use [captureImage]')
   void onTakePictureButtonPressed() async {
