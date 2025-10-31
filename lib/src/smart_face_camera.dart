@@ -10,7 +10,7 @@ import 'res/builders.dart';
 class SmartFaceCamera extends StatefulWidget {
   ///Initial widget to show when camera is initializing
 
-  final Widget? initialWidget;
+  final Widget? initialLoadingWidget;
 
   /// Set false to hide all controls.
   final bool showControls;
@@ -77,7 +77,7 @@ class SmartFaceCamera extends StatefulWidget {
     this.indicatorAssetImage,
     this.indicatorBuilder,
     this.autoDisableCaptureControl = false,
-    this.initialWidget,
+    this.initialLoadingWidget,
     Key? key,
   }) : assert(
          indicatorShape != IndicatorShape.image || indicatorAssetImage != null,
@@ -194,8 +194,8 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
                 ),
               ),
             ] else ...[
-              widget.initialWidget != null
-                  ? widget.initialWidget!
+              widget.initialLoadingWidget != null
+                  ? widget.initialLoadingWidget!
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
