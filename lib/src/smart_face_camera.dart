@@ -33,6 +33,9 @@ class SmartFaceCamera extends StatefulWidget {
   /// Use this to build custom widgets for capture control.
   final CaptureControlBuilder? captureControlBuilder;
 
+  /// Use this to build custom controls.
+  final CustomControlBuilder? customControlsBuilder;
+
   /// Use this to render a custom widget for camera lens control.
   final Widget? lensControlIcon;
 
@@ -79,6 +82,7 @@ class SmartFaceCamera extends StatefulWidget {
     this.autoDisableCaptureControl = false,
     this.initialLoadingWidget,
     Key? key,
+    this.customControlsBuilder,
   }) : assert(
          indicatorShape != IndicatorShape.image || indicatorAssetImage != null,
          'IndicatorAssetImage must be provided when IndicatorShape is set to image.',
@@ -211,7 +215,8 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
                     ),
             ],
 
-            if (widget.showControls) ...[
+            if (widget.showControls &&
+                widget.customControlsBuilder == null) ...[
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -234,6 +239,9 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
                   ),
                 ),
               ),
+            ] else ...[
+              if (widget.showControls && widget.customControlsBuilder != null)
+                widget.customControlsBuilder!.call(context, value.detectedFace),
             ],
           ],
         );
